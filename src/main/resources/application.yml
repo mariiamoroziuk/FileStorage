@@ -1,0 +1,6 @@
+springdoc:
+  swagger-ui:
+    path: /doc
+elasticsearch:
+  clustername: elasticsearch
+  hostAndPort: localhost:9200
