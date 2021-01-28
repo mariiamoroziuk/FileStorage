@@ -1,5 +1,6 @@
 package com.filestorage.model;
 
+import com.filestorage.helper.Format;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -24,6 +25,7 @@ public class File {
     private Set<String> tags = new HashSet<>();
 
     public File(String name, Long size){
+        Format.identifyTag(name).ifPresent(f->this.tags.add(f));
         this.name = name;
         this.size = size;
     }
