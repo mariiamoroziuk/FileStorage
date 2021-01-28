@@ -7,6 +7,7 @@ make sure you are connected to the Elasticsearch before starting, settings in re
 ENPOINTS:
 
 POST /file
+    
     {
        "name": "file_name.ext"
        "size" : 121231                           
@@ -53,6 +54,7 @@ DELETE /file/{ID}/tags
     }
     
 GET /file?tags=tag1,tag2,tag3&page=2&size=3
+    
     {
        "total": 25,
        "page": [
