@@ -16,30 +16,35 @@ import java.util.List;
 @RequestMapping("file")
 @RequiredArgsConstructor
 public class FileController {
-    private final FileService service;
+  private final FileService service;
 
-    @PostMapping
-    public ResponseEntity<UploadFileResponse> upload(@RequestBody @Valid UploadFileRequest f) {
-        return ResponseEntity.ok(service.upload(f));
-    }
+  @PostMapping
+  public ResponseEntity<UploadFileResponse> upload(@RequestBody @Valid UploadFileRequest f) {
+    return ResponseEntity.ok(service.upload(f));
+  }
 
-    @DeleteMapping("{ID}")
-    public ResponseEntity<BaseResponse> delete(@PathVariable("ID") String id) {
-        return ResponseEntity.ok(service.delete(id));
-    }
+  @DeleteMapping("{ID}")
+  public ResponseEntity<BaseResponse> delete(@PathVariable("ID") String id) {
+    return ResponseEntity.ok(service.delete(id));
+  }
 
-    @GetMapping
-    public ResponseEntity<GetFilesResponse> read(@RequestParam(required = false) List<String> tags, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(service.read(tags, page, size));
-    }
+  @GetMapping
+  public ResponseEntity<GetFilesResponse> read(
+      @RequestParam(required = false) List<String> tags,
+      @RequestParam String page,
+      @RequestParam String size) {
+    return ResponseEntity.ok(service.read(tags, page, size));
+  }
 
-    @PostMapping("{ID}/tags")
-    public ResponseEntity<BaseResponse> assignTags(@PathVariable("ID") String id, @RequestBody String[] tags){
-        return ResponseEntity.ok(service.assignTags(id, tags));
-    }
+  @PostMapping("{ID}/tags")
+  public ResponseEntity<BaseResponse> assignTags(
+      @PathVariable("ID") String id, @RequestBody String[] tags) {
+    return ResponseEntity.ok(service.assignTags(id, tags));
+  }
 
-    @DeleteMapping("{ID}/tags")
-    public ResponseEntity<BaseResponse> removeTags(@PathVariable("ID") String id, @RequestBody String[] tags){
-        return ResponseEntity.ok(service.removeTags(id, tags));
-    }
+  @DeleteMapping("{ID}/tags")
+  public ResponseEntity<BaseResponse> removeTags(
+      @PathVariable("ID") String id, @RequestBody String[] tags) {
+    return ResponseEntity.ok(service.removeTags(id, tags));
+  }
 }

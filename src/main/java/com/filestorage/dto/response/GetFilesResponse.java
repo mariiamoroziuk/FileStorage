@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class GetFilesResponse {
-    private Long total;
-    private Iterable<File> page;
+  private Long total;
+  private Iterable<File> page;
 }

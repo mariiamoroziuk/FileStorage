@@ -18,36 +18,60 @@ import java.util.NoSuchElementException;
 @Service
 @RequiredArgsConstructor
 public class FileService {
-    private final FileRepository repository;
+  private final FileRepository repository;
 
-    public UploadFileResponse upload(UploadFileRequest f) {
-        File file = repository.save(new File(f.getName(), f.getSize()));
-        return new UploadFileResponse(file.getId());
-    }
+  public UploadFileResponse upload(UploadFileRequest f) {
+    File file = repository.save(new File(f.getName(), f.getSize()));
+    return new UploadFileResponse(file.getId());
+  }
 
-    public BaseResponse delete(String id) {
-        repository.findById(id).orElseThrow(() -> new NoSuchElementException(String.format("file id %s not found", id)));
-        repository.deleteById(id);
-        return new BaseResponse(true);
-    }
+  public BaseResponse delete(String id) {
+    repository
+        .findById(id)
+        .orElseThrow(() -> new NoSuchElementException(String.format("file id %s not found", id)));
+    repository.deleteById(id);
+    return new BaseResponse(true);
+  }
 
-    public GetFilesResponse read(List<String> tags, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<File> files = (tags != null)
-                ? repository.findAllByTags(tags, pageable)
-                : repository.findAll(pageable);
-        return new GetFilesResponse(files.getTotalElements(), files.getContent());
+  public GetFilesResponse read(List<String> tags, String strPage, String strSize) {
+    int page, size;
+    try {
+      page = Integer.parseInt(strPage);
+    } catch (NumberFormatException ex) {
+      page = 0;
     }
+    try {
+      size = Integer.parseInt(strSize);
+    } catch (NumberFormatException ex) {
+      size = 10;
+    }
+    Pageable pageable = PageRequest.of(page, size);
+    Page<File> files =
+        (tags != null) ? repository.findAllByTags(tags, pageable) : repository.findAll(pageable);
+    return new GetFilesResponse(files.getTotalElements(), files.getContent());
+  }
 
-    public BaseResponse assignTags(String id, String[] tags){
-        return repository.findById(id)
-                .map(f->{f.assignTags(tags); repository.save(f); return new BaseResponse(true);})
-                .orElseThrow(() -> new NoSuchElementException(String.format("file id %s not found", id)));
-    }
+  public BaseResponse assignTags(String id, String[] tags) {
+    return repository
+        .findById(id)
+        .map(
+            f -> {
+              f.assignTags(tags);
+              repository.save(f);
+              return new BaseResponse(true);
+            })
+        .orElseThrow(() -> new NoSuchElementException(String.format("file id %s not found", id)));
+  }
 
-    public BaseResponse removeTags(String id, String[] tags){
-        return repository.findById(id)
-                .map(f->{f.removeTags(tags); repository.save(f); return new BaseResponse(true);})
-                .orElseThrow(() -> new NoSuchElementException(String.format("file id %s not found", id)));
-    }
+  public BaseResponse removeTags(String id, String[] tags) {
+    return repository
+        .findById(id)
+        .map(
+            f -> {
+              f.removeTags(tags);
+              repository.save(f);
+              return new BaseResponse(true);
+            })
+        .orElseThrow(() -> new NoSuchElementException(String.format("file id %s not found", id)));
+  }
 }

@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UploadFileResponse {
-    private String ID;
+  private String ID;
 }
